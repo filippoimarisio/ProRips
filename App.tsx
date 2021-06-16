@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity} from 'react-native';
 import * as Location from 'expo-location';
 
 export default function App() {
   const [location, setLocation] = useState<Location.LocationObject>();
   const [errorMsg, setErrorMsg] = useState('');
   const [watcher, setWatcher] = useState()
+  const [markers, setMarkers] = useState<Array<Marker>>([])
 
   async function startTracking() {
     Location.watchPositionAsync({
@@ -37,9 +38,28 @@ export default function App() {
     })();
   }, []);
 
+  interface Marker {
+    latitude: number,
+    longitude: number
+  }
+
+  const createMarker = (location: Marker) => {
+    setMarkers([...markers, {latitude:location.latitude, longitude:location.longitude}])
+  }
+
+  const onSetMarker = () => {
+    if (location) createMarker({latitude:location.coords.latitude, longitude:location.coords.longitude})
+  }
+
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={onSetMarker}
+      >
+        <Text>Set Marker</Text>
+      </TouchableOpacity>
       <MapView 
         style={styles.map}
         provider="google"
@@ -50,11 +70,23 @@ export default function App() {
           latitudeDelta: location? 0.0000: 50,
           longitudeDelta: location? 0.0000: 50,
         }}
-      ><Marker
+        onLongPress={(e)=> createMarker(e.nativeEvent.coordinate)}
+      >
+        { markers && markers.map((marker, index)=> (
+          <Marker
+            key={index}
+            coordinate={{
+              latitude: marker.latitude,
+              longitude: marker.longitude
+            }}
+          />
+        ))}
+        <Marker
           coordinate={{
             latitude: location? location.coords.latitude:52.3676,
             longitude: location? location.coords.longitude:4.9041
           }}
+          pinColor={'blue'}
         />
       </MapView>
       
@@ -71,5 +103,13 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+    zIndex: 1,
+    top: 100,
+    borderRadius: 10
   }
 })
