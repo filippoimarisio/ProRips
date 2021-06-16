@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, } from 'react-native';
 import * as Location from 'expo-location';
@@ -11,7 +11,7 @@ export default function App() {
   async function startTracking() {
     Location.watchPositionAsync({
       accuracy: Location.Accuracy.Highest,
-      timeInterval: 1000,
+      timeInterval: 3000,
       distanceInterval: 1
     }, (newLocation) => setLocation(newLocation))
     .then((locationWatcher) => {
@@ -37,22 +37,23 @@ export default function App() {
     })();
   }, []);
 
+
   return (
     <View style={styles.container}>
       <MapView 
         style={styles.map}
         provider="google"
         mapType="satellite"
-        initialRegion={{
-          latitude: location? location.coords.latitude : 0,
-          longitude: location? location.coords.longitude: 0,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+        region={{
+          latitude: location? location.coords.latitude : 52.3676,
+          longitude: location? location.coords.longitude: 4.9041,
+          latitudeDelta: location? 0.0000: 50,
+          longitudeDelta: location? 0.0000: 50,
         }}
       ><Marker
           coordinate={{
-            latitude: location? location.coords.latitude:0,
-            longitude: location? location.coords.longitude:0
+            latitude: location? location.coords.latitude:52.3676,
+            longitude: location? location.coords.longitude:4.9041
           }}
         />
       </MapView>
