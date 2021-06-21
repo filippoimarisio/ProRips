@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image} from 'react-native';
 import * as Location from 'expo-location';
+import {getDistance, getPreciseDistance} from 'geolib';
 
 export default function App() {
   const [location, setLocation] = useState<Location.LocationObject>();
@@ -46,11 +47,17 @@ export default function App() {
   }
 
   interface DiscLocation extends Location{
-    id: number
+    id: number,
+    distanceFromEnd: number
   }
 
   const setDiscLocation = (location: Location) => {
-    setDiscsLocation([...discsLocation, {latitude:location.latitude, longitude:location.longitude, id: getNextId(discsLocation)}])
+    setDiscsLocation([...discsLocation, {
+      latitude:location.latitude, 
+      longitude:location.longitude, 
+      id: getNextId(discsLocation),
+      distanceFromEnd: endLocation? getDistance({latitude: location.latitude, longitude: location.longitude}, endLocation): 0
+    }])
   }
 
   const onSetLimitLocation = (isStart: boolean) => {
@@ -96,6 +103,7 @@ export default function App() {
             source={require('./assets/marker_basket.png')}
             style={{ width: 50, height: 50 }}
           />
+          { startLocation && endLocation && <Text style={styles.mapLabel}>{getDistance(startLocation, endLocation)}m from start</Text>}
         </View>
       </Marker>
     )
@@ -116,6 +124,7 @@ export default function App() {
               source={require('./assets/marker_disc.png')}
               style={{ width: 30, height: 30 }}
             />
+            <Text style={styles.mapLabel}>{disc.distanceFromEnd}m</Text>
           </View> 
         </Marker>
       )
@@ -136,6 +145,12 @@ export default function App() {
           onPress={()=> onSetLimitLocation(false)}
         >
           <Text>Set End</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={()=> location? setDiscLocation({latitude:location.coords.latitude, longitude:location.coords.longitude}): null}
+        >
+          <Text>Set Disc</Text>
         </TouchableOpacity>
       </View>
       <MapView 
@@ -189,5 +204,8 @@ const styles = StyleSheet.create({
   setButtons: {
     flexDirection: 'row',
     justifyContent: 'space-evenly'
+  },
+  mapLabel: {
+    color: 'white'
   }
 })
