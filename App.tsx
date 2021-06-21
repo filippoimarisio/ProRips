@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import MapView, {Marker} from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image} from 'react-native';
 import * as Location from 'expo-location';
 
 export default function App() {
@@ -72,7 +72,14 @@ export default function App() {
           latitude: startLocation.latitude,
           longitude: startLocation.longitude
         }}
-      />
+      >
+        <View>
+          <Image
+            source={require('./assets/marker_tee.png')}
+            style={{ width: 50, height: 50 }}
+          />
+        </View>
+      </Marker>
     )
   }
 
@@ -83,12 +90,18 @@ export default function App() {
           latitude: endLocation.latitude,
           longitude: endLocation.longitude
         }}
-      />
+      >
+        <View>
+          <Image
+            source={require('./assets/marker_basket.png')}
+            style={{ width: 50, height: 50 }}
+          />
+        </View>
+      </Marker>
     )
   }
 
   const displayDiscsLocation = () => {
-    console.log('discsLocation', discsLocation)
     return discsLocation.map(disc=> {
       return (
         <Marker
@@ -97,25 +110,34 @@ export default function App() {
             latitude: disc.latitude,
             longitude: disc.longitude
           }}
-        />
+        >
+          <View>
+            <Image
+              source={require('./assets/marker_disc.png')}
+              style={{ width: 30, height: 30 }}
+            />
+          </View> 
+        </Marker>
       )
     })
   }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={()=>onSetLimitLocation(true)}
-      >
-        <Text>Set Start</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={()=> onSetLimitLocation(false)}
-      >
-        <Text>Set End</Text>
-      </TouchableOpacity>
+      <View style={styles.setButtons}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={()=>onSetLimitLocation(true)}
+        >
+          <Text>Set Start</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={()=> onSetLimitLocation(false)}
+        >
+          <Text>Set End</Text>
+        </TouchableOpacity>
+      </View>
       <MapView 
         style={styles.map}
         provider="google"
@@ -161,6 +183,11 @@ const styles = StyleSheet.create({
     padding: 10,
     zIndex: 1,
     top: 100,
-    borderRadius: 10
+    borderRadius: 10,
+    marginHorizontal: 20
+  },
+  setButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   }
 })
