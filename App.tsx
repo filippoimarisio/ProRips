@@ -7,7 +7,9 @@ export default function App() {
   const [location, setLocation] = useState<Location.LocationObject>();
   const [errorMsg, setErrorMsg] = useState('');
   const [watcher, setWatcher] = useState()
-  const [markers, setMarkers] = useState<Array<Marker>>([])
+  const [startLocation, setStartLocation] = useState<Location|undefined>(undefined)
+  const [endLocation, setEndLocation] = useState<Location|undefined>(undefined)
+  const [discsLocation, setDiscsLocation] = useState<Array<DiscLocation>>([])
 
   async function startTracking() {
     Location.watchPositionAsync({
@@ -38,27 +40,81 @@ export default function App() {
     })();
   }, []);
 
-  interface Marker {
+  interface Location {
     latitude: number,
-    longitude: number
+    longitude: number,
   }
 
-  const createMarker = (location: Marker) => {
-    setMarkers([...markers, {latitude:location.latitude, longitude:location.longitude}])
+  interface DiscLocation extends Location{
+    id: number
   }
 
-  const onSetMarker = () => {
-    if (location) createMarker({latitude:location.coords.latitude, longitude:location.coords.longitude})
+  const setDiscLocation = (location: Location) => {
+    setDiscsLocation([...discsLocation, {latitude:location.latitude, longitude:location.longitude, id: getNextId(discsLocation)}])
   }
 
+  const onSetLimitLocation = (isStart: boolean) => {
+    if (location) {
+      if (isStart) setStartLocation({latitude:location.coords.latitude, longitude:location.coords.longitude})
+      else setEndLocation({latitude:location.coords.latitude, longitude:location.coords.longitude})
+    }
+  }
+
+  const getNextId = (discs: DiscLocation[]) => {
+    if (discs.length>0) return JSON.parse(JSON.stringify(discs)).sort((a: DiscLocation,b: DiscLocation)=>b.id - a.id)[0].id + 1
+    else return 0
+  }
+
+  const displayStartMarker = () => {
+    if (startLocation) return (
+      <Marker
+        coordinate={{
+          latitude: startLocation.latitude,
+          longitude: startLocation.longitude
+        }}
+      />
+    )
+  }
+
+  const displayEndMarker = () => {
+   if (endLocation) return (
+      <Marker
+        coordinate={{
+          latitude: endLocation.latitude,
+          longitude: endLocation.longitude
+        }}
+      />
+    )
+  }
+
+  const displayDiscsLocation = () => {
+    console.log('discsLocation', discsLocation)
+    return discsLocation.map(disc=> {
+      return (
+        <Marker
+          key={disc.id}
+          coordinate={{
+            latitude: disc.latitude,
+            longitude: disc.longitude
+          }}
+        />
+      )
+    })
+  }
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.button}
-        onPress={onSetMarker}
+        onPress={()=>onSetLimitLocation(true)}
       >
-        <Text>Set Marker</Text>
+        <Text>Set Start</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={()=> onSetLimitLocation(false)}
+      >
+        <Text>Set End</Text>
       </TouchableOpacity>
       <MapView 
         style={styles.map}
@@ -70,17 +126,12 @@ export default function App() {
           latitudeDelta: location? 0.0000: 50,
           longitudeDelta: location? 0.0000: 50,
         }}
-        onLongPress={(e)=> createMarker(e.nativeEvent.coordinate)}
+        onLongPress={(e)=> setDiscLocation(e.nativeEvent.coordinate)}
       >
-        { markers && markers.map((marker, index)=> (
-          <Marker
-            key={index}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude
-            }}
-          />
-        ))}
+        { startLocation && displayStartMarker() }
+        { endLocation && displayEndMarker() }
+        { discsLocation && displayDiscsLocation()}
+
         <Marker
           coordinate={{
             latitude: location? location.coords.latitude:52.3676,
