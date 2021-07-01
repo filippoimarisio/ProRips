@@ -6,7 +6,7 @@ export default function Home() {
     <View style={styles.container}>
       <Text>Homepage</Text>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

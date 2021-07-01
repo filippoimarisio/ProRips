@@ -1,17 +1,28 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import MapView, {Marker} from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Image} from 'react-native';
 import * as Location from 'expo-location';
 import {getDistance, getPreciseDistance} from 'geolib';
+import { MapLocation, DiscLocation } from '../types/types'
+import { useAppSelector, useAppDispatch } from '../hooks'
+import { addDiscLocation } from '../slices/discsLocationSlice'
 
 export default function App() {
+
+  // Local State
   const [location, setLocation] = useState<Location.LocationObject>();
   const [errorMsg, setErrorMsg] = useState('');
   const [watcher, setWatcher] = useState()
-  const [startLocation, setStartLocation] = useState<Location|undefined>(undefined)
-  const [endLocation, setEndLocation] = useState<Location|undefined>(undefined)
-  const [discsLocation, setDiscsLocation] = useState<Array<DiscLocation>>([])
+  const [startLocation, setStartLocation] = useState<MapLocation|undefined>(undefined)
+  const [endLocation, setEndLocation] = useState<MapLocation|undefined>(undefined)
+  // const [discsLocation, setDiscsLocation] = useState<Array<DiscLocation>>([])
 
+
+  // App State methods
+  const discsLocation = useAppSelector((state) => state.discsLocation)
+  const dispatch = useAppDispatch()
+
+  // Helper functions
   async function startTracking() {
     Location.watchPositionAsync({
       accuracy: Location.Accuracy.Highest,
@@ -41,23 +52,14 @@ export default function App() {
     })();
   }, []);
 
-  interface Location {
-    latitude: number,
-    longitude: number,
-  }
 
-  interface DiscLocation extends Location{
-    id: number,
-    distanceFromEnd: number
-  }
-
-  const setDiscLocation = (location: Location) => {
-    setDiscsLocation([...discsLocation, {
+  const setDiscLocation = (location: MapLocation) => {
+    dispatch(addDiscLocation({
       latitude:location.latitude, 
       longitude:location.longitude, 
       id: getNextId(discsLocation),
       distanceFromEnd: endLocation? getDistance({latitude: location.latitude, longitude: location.longitude}, endLocation): 0
-    }])
+    }))
   }
 
   const onSetLimitLocation = (isStart: boolean) => {
