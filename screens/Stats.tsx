@@ -9,17 +9,15 @@ export default function Stats() {
   
   const discsLocation = useAppSelector((state) => state.discsLocation)
   
-
   const renderItem = ({ item }: { item: DiscLocation }) => {
-    console.log('itemrender', item)
     return (
       <DataTable.Row key={item.id}>
         <DataTable.Cell>Disc {item.id}</DataTable.Cell>
-        <DataTable.Cell numeric>{item.distanceFromEnd}</DataTable.Cell>
+        <DataTable.Cell numeric>{item.distanceFromTee}m</DataTable.Cell>
+        <DataTable.Cell numeric>{item.distanceFromBasket}m</DataTable.Cell>
       </DataTable.Row>
     )
   }
-  ;
 
   return (
     <View style={styles.container}>
@@ -27,7 +25,8 @@ export default function Stats() {
       <DataTable> 
         <DataTable.Header>
           <DataTable.Title>Disc</DataTable.Title>
-          <DataTable.Title numeric>Distance</DataTable.Title>
+          <DataTable.Title numeric>Tee</DataTable.Title>
+          <DataTable.Title numeric>Basket</DataTable.Title>
         </DataTable.Header>
         { discsLocation.map(disc=>renderItem({item: disc}))}
       </DataTable>

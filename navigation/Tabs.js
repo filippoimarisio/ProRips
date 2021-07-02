@@ -4,11 +4,16 @@ import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image} from 'reac
 import Home from '../screens/Home'
 import Field from '../screens/Field'
 import Stats from '../screens/Stats'
+import { useTheme } from 'react-native-paper';
 
 
 const Tab = createBottomTabNavigator()
 
+
 export default function Tabs() {
+
+  const { colors } = useTheme()
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -38,11 +43,11 @@ export default function Tabs() {
                   style= {{
                     height: 25,
                     width: 25,
-                    tintColor: focused? 'limegreen':'darkgray'
+                    tintColor: focused? colors.accent:'darkgray'
                   }}
                 />
                 <Text
-                  style={{color: focused? 'limegreen': 'darkgray', fontSize: 12}}
+                  style={{color: focused? colors.accent: 'darkgray', fontSize: 12}}
                 >HOME</Text>
               </View>
             )
@@ -60,11 +65,11 @@ export default function Tabs() {
                 style= {{
                   height: 25,
                   width: 25,
-                  tintColor: focused? 'limegreen':'darkgray'
+                  tintColor: focused? colors.accent:'darkgray'
                 }}
               />
               <Text
-                style={{color: focused? 'limegreen': 'darkgray', fontSize: 12}}
+                style={{color: focused? colors.accent: 'darkgray', fontSize: 12}}
               >FIELD</Text>
             </View>
           )
@@ -82,11 +87,11 @@ export default function Tabs() {
                 style= {{
                   height: 25,
                   width: 25,
-                  tintColor: focused? 'limegreen':'darkgray'
+                  tintColor: focused? colors.accent:'darkgray'
                 }}
               />
               <Text
-                style={{color: focused? 'limegreen': 'darkgray', fontSize: 12}}
+                style={{color: focused? colors.accent: 'darkgray', fontSize: 12}}
               >STATS</Text>
             </View>
           )

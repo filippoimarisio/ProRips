@@ -6,5 +6,6 @@ export interface MapLocation {
 
 export interface DiscLocation extends MapLocation{
   id: number,
-  distanceFromEnd: number
+  distanceFromBasket: number,
+  distanceFromTee: number
 }

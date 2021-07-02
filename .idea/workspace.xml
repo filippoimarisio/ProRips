@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a329186-152b-4ecf-bed4-20955686ac26" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/Field.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Field.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/navigation/Tabs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/Home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Home.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/Stats.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/screens/Stats.tsx" afterDir="false" />
     </list>
@@ -41,9 +40,9 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="191" y="200" width="1060" height="535" key="AVDManager" timestamp="1625169533323">
+    <state x="190" y="200" width="1060" height="535" key="AVDManager" timestamp="1625235549272">
       <screen x="0" y="25" width="1280" height="775" />
     </state>
-    <state x="191" y="200" width="1060" height="535" key="AVDManager/0.25.1280.775@0.25.1280.775" timestamp="1625169533323" />
+    <state x="190" y="200" width="1060" height="535" key="AVDManager/0.25.1280.775@0.25.1280.775" timestamp="1625235549272" />
   </component>
 </project>

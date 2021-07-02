@@ -58,7 +58,8 @@ export default function App() {
       latitude:location.latitude, 
       longitude:location.longitude, 
       id: getNextId(discsLocation),
-      distanceFromEnd: endLocation? getDistance({latitude: location.latitude, longitude: location.longitude}, endLocation): 0
+      distanceFromBasket: endLocation? getDistance({latitude: location.latitude, longitude: location.longitude}, endLocation): 0,
+      distanceFromTee: startLocation? getDistance({latitude: location.latitude, longitude: location.longitude}, startLocation): 0
     }))
   }
 
@@ -126,7 +127,7 @@ export default function App() {
               source={require('../assets/marker_disc.png')}
               style={{ width: 30, height: 30 }}
             />
-            <Text style={styles.mapLabel}>{disc.distanceFromEnd}m</Text>
+            <Text style={styles.mapLabel}>{disc.distanceFromBasket}m</Text>
           </View> 
         </Marker>
       )
