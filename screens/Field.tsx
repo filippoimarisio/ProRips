@@ -15,7 +15,6 @@ export default function App() {
   const [watcher, setWatcher] = useState()
   const [startLocation, setStartLocation] = useState<MapLocation|undefined>(undefined)
   const [endLocation, setEndLocation] = useState<MapLocation|undefined>(undefined)
-  // const [discsLocation, setDiscsLocation] = useState<Array<DiscLocation>>([])
 
 
   // App State methods
@@ -137,23 +136,23 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.setButtons}>
+      <TouchableOpacity
+          style={{...styles.button, backgroundColor: "rgba(255, 99, 71, 0.8)",}}
+          onPress={()=> location? setDiscLocation({latitude:location.coords.latitude, longitude:location.coords.longitude}): null}
+        >
+          <Image source={require('../assets/marker_disc.png')} resizeMode='contain' style={{flex:2 }}/>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={()=>onSetLimitLocation(true)}
         >
-          <Text>Set Start</Text>
+          <Image source={require('../assets/marker_tee.png')} resizeMode='contain' style={{flex:2 }}/>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.button}
           onPress={()=> onSetLimitLocation(false)}
         >
-          <Text>Set End</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={()=> location? setDiscLocation({latitude:location.coords.latitude, longitude:location.coords.longitude}): null}
-        >
-          <Text>Set Disc</Text>
+          <Image source={require('../assets/marker_basket.png')} resizeMode='contain' style={{flex:2 }}/>
         </TouchableOpacity>
       </View>
       <MapView 
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   map: {
     width: Dimensions.get('window').width,
@@ -197,16 +196,20 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    backgroundColor: "rgba(245,245,245, 0.5)",
+    padding: 8,
     zIndex: 1,
-    top: 100,
-    borderRadius: 10,
-    marginHorizontal: 20
+    borderRadius: 30,
+    marginBottom: 20,
+    height: 60,
+    width: 60
   },
   setButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    position: 'absolute',
+    right: 30,
+    bottom: 120
   },
   mapLabel: {
     color: 'white'
